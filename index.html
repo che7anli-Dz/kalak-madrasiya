@@ -254,6 +254,7 @@ async function enterLobby(rm){
   $('host-controls').style.display=me.isHost?'block':'none';
   $('guest-wait').style.display=me.isHost?'none':'block';
   await refreshPlayers();
+  await refreshPlayers();
   subscribeRoom();
 }
 
@@ -452,6 +453,7 @@ async function sendFake(){
 
 async function onAnswerCount(){
   if(!room||room.status!=='answering')return;
+  await refreshPlayers();
   const c=await answerCount();
   const el=$('ans-count');if(el)el.textContent='('+c+'/'+players.length+')';
   if(me.isHost&&players.length>0&&c>=players.length)forceVoting();
@@ -501,6 +503,7 @@ async function voteCount(){
 }
 async function onVoteCount(){
   if(!room||room.status!=='voting')return;
+  await refreshPlayers();
   const c=await voteCount();
   if(me.isHost&&players.length>0&&c>=players.length)forceReveal();
 }
