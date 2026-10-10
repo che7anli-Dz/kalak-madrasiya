@@ -437,10 +437,13 @@ async function answerCount(){
   return count||0;
 }
 
-async function sendFake(){
+function normAr(s){return String(s||'').trim().replace(/[\u064B-\u0652\u0670]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/\s+/g,' ').toLowerCase();}
+  function isTrueAnswer(t){const a=normAr(t).replace(/^(ال|ل)/,''),b=normAr(room.q&&room.q.a).replace(/^(ال|ل)/,'');return a.length>=2&&b.length>=2&&(a===b||(a.length>=3&&b.indexOf(a)>-1)||(b.length>=3&&a.indexOf(b)>-1));}
+  async function sendFake(){    
   const t=$('in-fake').value.trim();
   if(!t){toast('اكتب إجابتك الأول 😊');return;}
   if(t.length<2){toast('الإجابة قصيرة بزاف!');return;}
+      if(isTrueAnswer(t)){$('in-fake').value='';toast('🎉 مبروك! لقيت الإجابة الصحيحة — اكتب إجابة أخرى باش تخدع باقي اللاعبين 😏');return;}
   $('btn-send-fake').disabled=true;
   const {error}=await sb.from('kalak_answers').insert({room_id:me.roomId,round:room.round,player_id:me.playerId,text:t,is_true:false});
   if(error){toast('ما تروحش الإجابة — يمكن أرسلتها من قبل');$('btn-send-fake').disabled=false;return;}
