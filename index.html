@@ -54,6 +54,15 @@ label{font-weight:bold;font-size:14px;color:#1e3a5f;display:block;margin-top:12p
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
 .reveal-true{background:#dcf7e8;border:3px solid #22a95c;border-radius:14px;padding:12px;margin-top:8px;color:#1e3a5f}
 .reveal-fake{background:#fffbe8;border:3px solid #ffd166;border-radius:14px;padding:12px;margin-top:8px;color:#1e3a5f}
+.reveal-true,.reveal-fake{display:flex;align-items:center;gap:10px}
+.r-emoji{font-size:26px;flex-shrink:0}
+.r-body{flex:1;min-width:0}
+.r-body b{font-size:17px}
+.r-who{display:flex;align-items:center;gap:6px;font-size:12px;color:#5b7a99;margin-top:4px}
+.r-who .avatar{width:24px;height:24px;font-size:11px;margin:0;border-width:2px}
+.r-badge{background:#1e3a5f;color:#fff;border-radius:12px;padding:4px 12px;font-weight:bold;font-size:15px;white-space:nowrap;flex-shrink:0}
+.reveal-true .r-badge{background:#22a95c}
+.r-badge.zero{background:#b0becf}
 .ptline{font-size:13px;color:#15803d;font-weight:bold;margin-top:4px}
 .wait{text-align:center;color:#1e3a5f;padding:20px;font-size:15px;line-height:2;font-weight:bold}
 .count-badge{background:#2f80ed;color:#fff;border-radius:12px;font-size:12px;padding:1px 8px;margin-right:6px;border:2px solid #1e3a5f}
@@ -78,6 +87,12 @@ label{font-weight:bold;font-size:14px;color:#1e3a5f;display:block;margin-top:12p
 .linkrow .btn{margin-top:8px}
 .g-head{display:flex;justify-content:space-between;align-items:center;background:#1e3a5f;border-radius:14px;padding:8px 14px;margin-bottom:4px}
 .g-head b{color:#ffd166;font-size:15px}
+.av-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}
+.av-opt{background:#fff;border:3px solid #1e3a5f;border-radius:14px;padding:4px;cursor:pointer;text-align:center;box-shadow:0 3px 0 #1e3a5f}
+.av-opt img{width:100%;border-radius:10px;display:block}
+.av-opt:active{transform:translateY(2px);box-shadow:none}
+.av-opt.sel{background:#ffd166;transform:scale(1.08)}
+.avatar .em{font-size:22px}
 .g-round{background:#ffd166;color:#1e3a5f;border-radius:20px;padding:4px 14px;font-size:14px;font-weight:bold;border:2px solid #fff}
 </style>
 </head>
@@ -98,6 +113,8 @@ label{font-weight:bold;font-size:14px;color:#1e3a5f;display:block;margin-top:12p
     <h2>👋 أهلاً بيك</h2>
     <label>اسمك</label>
     <input id="in-name" placeholder="مثال: أمين" maxlength="20">
+    <label>🎭 اختار الأفاتار تاعك</label>
+    <div class="av-grid" id="av-grid"></div>
     <button class="btn btn-pri" onclick="createRoom()">🎮 غرفة جديدة</button>
     <h3>— ولا ادخل غرفة صاحبك —</h3>
     <label>كود الغرفة</label>
@@ -247,6 +264,7 @@ function playerName(){
   return n;
 }
 try{const sn=localStorage.getItem('kalak_name');if(sn)$('in-name').value=sn;}catch(e){}
+renderAvGrid();
 
 async function createRoom(){
   const n=playerName();if(!n)return;
@@ -254,7 +272,7 @@ async function createRoom(){
   const {data,error}=await sb.from('kalak_rooms').insert({code:code,host_name:n,status:'lobby'}).select().single();
   if(error){toast('مشكلة في إنشاء الغرفة، عاود حاول');return;}
   me={name:n,playerId:null,roomId:data.id,code:code,isHost:true};
-  const p=await sb.from('kalak_players').insert({room_id:data.id,name:n,is_host:true}).select().single();
+  const p=await sb.from('kalak_players').insert({room_id:data.id,name:n,is_host:true,avatar:myAvatar}).select().single();
   if(p.error){toast('مشكلة في الدخول');return;}
   me.playerId=p.data.id;
   enterLobby(data);
@@ -267,7 +285,7 @@ async function joinRoom(codeArg){
   const {data:rm}=await sb.from('kalak_rooms').select('*').eq('code',code).single();
   if(!rm){toast('ما لقيتش غرفة بهذا الكود 😕');return;}
   if(rm.status!=='lobby'){toast('اللعبة بدات في هذه الغرفة، جرب غرفة أخرى');return;}
-  const p=await sb.from('kalak_players').insert({room_id:rm.id,name:n,is_host:false}).select().single();
+  const p=await sb.from('kalak_players').insert({room_id:rm.id,name:n,is_host:false,avatar:myAvatar}).select().single();
   if(p.error){toast('مشكلة في الدخول');return;}
   me={name:n,playerId:p.data.id,roomId:rm.id,code:code,isHost:false};
   enterLobby(rm);
@@ -358,13 +376,21 @@ function copyCode(){
   else toast('الكود: '+me.code);
 }
 
+const AVATARS=["https://che7anli-dz.github.io/kalak-madrasiya/avatars/av1.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av2.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av3.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av4.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av5.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av6.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av7.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av8.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av9.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av10.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av11.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av12.png"];
+let myAvatar=null;
+try{myAvatar=localStorage.getItem('kalak_avatar')||null;}catch(e){}
+function renderAvGrid(){
+  $('av-grid').innerHTML=AVATARS.map((a,i)=>'<div class="av-opt'+(a===myAvatar?' sel':'')+'" onclick="pickAvatar(\''+a+'\')"><img src="'+a+'" alt="'+(i+1)+'"></div>').join('');
+}
+function pickAvatar(a){myAvatar=a;try{localStorage.setItem('kalak_avatar',a);}catch(e){}renderAvGrid();}
+
 const AVC=['#e63946','#2a9d8f','#e9c46a','#9b5de5','#f15bb5','#00bbf9','#ff9f1c','#06d6a0'];
 function avColor(n){let h=0;for(const c of String(n))h=(h*31+c.charCodeAt(0))>>>0;return AVC[h%AVC.length];}
-function avHTML(n){return '<span class="avatar" style="background:'+avColor(n)+'">'+esc(String(n).trim().charAt(0)||'?')+'</span>';}
+function avHTML(n,av){return av?'<span class="avatar" style="background:#fff;overflow:hidden"><img src="'+av+'" style="width:100%;height:100%;object-fit:cover"></span>':'<span class="avatar" style="background:'+avColor(n)+'">'+esc(String(n).trim().charAt(0)||'?')+'</span>';}
 async function refreshPlayers(){
   const {data}=await sb.from('kalak_players').select('*').eq('room_id',me.roomId).order('joined_at');
   players=data||[];
-  $('players').innerHTML=players.map(p=>'<div class="player"><span class="pname">'+avHTML(p.name)+esc(p.name)+(p.is_host?'<span class="host-tag">المضيف 👑</span>':'')+'</span><span class="sc">'+p.score+'</span></div>').join('');
+  $('players').innerHTML=players.map(p=>'<div class="player"><span class="pname">'+avHTML(p.name,p.avatar)+esc(p.name)+(p.is_host?'<span class="host-tag">المضيف 👑</span>':'')+'</span><span class="sc">'+p.score+'</span></div>').join('');
   $('pcount').textContent='('+(players.length)+' لاعب)';
   renderScores();
 }
@@ -443,7 +469,7 @@ function showEnd(){
   if(s.length){
     $('end-winner').textContent=s[0].name+' 🎉';
     const mx=Math.max(1,s[0].score);
-    $('end-podium').innerHTML=s.map((p,i)=>'<div class="podium-row'+(i===0?' first':'')+'"><span class="rank">'+(i+1)+'</span><span class="pname">'+avHTML(p.name)+'<b>'+esc(p.name)+'</b></span><div class="pbar"><div class="pfill" style="width:'+Math.round(100*p.score/mx)+'%"></div></div><span class="pscore">'+p.score+' نقطة</span></div>').join('');
+    $('end-podium').innerHTML=s.map((p,i)=>'<div class="podium-row'+(i===0?' first':'')+'"><span class="rank">'+(i+1)+'</span><span class="pname">'+avHTML(p.name,p.avatar)+'<b>'+esc(p.name)+'</b></span><div class="pbar"><div class="pfill" style="width:'+Math.round(100*p.score/mx)+'%"></div></div><span class="pscore">'+p.score+' نقطة</span></div>').join('');
   }
   $('end-host-btns').style.display=me.isHost?'block':'none';
   show('s-end');
@@ -591,9 +617,10 @@ async function setupReveal(){
   const sorted=(answers||[]).slice().sort((a,b)=>(b.is_true?1:0)-(a.is_true?1:0));
   $('reveal-list').innerHTML=sorted.map(a=>{
     const c=cnt[a.id]||0;
-    if(a.is_true)return '<div class="reveal-true">✅ <b>'+esc(a.text)+'</b> <span class="who">— الإجابة الصحيحة</span><div class="ptline">'+c+' لاعب لقاها (+2 لكل واحد)</div></div>';
-    const fooled=(votes||[]).filter(v=>v.answer_id===a.id).map(v=>pname(v.voter_id)).join('، ');
-    return '<div class="reveal-fake">🎭 <b>'+esc(a.text)+'</b><span class="who">— كذبة '+pname(a.player_id)+'</span>'+(c?'<div class="ptline">خدع: '+fooled+' (+'+c+' نقطة)</div>':'<div class="ptline" style="color:#92400e">ما خدع حتى واحد 😅</div>')+'</div>';
+    if(a.is_true)return '<div class="reveal-true"><span class="r-emoji">✅</span><div class="r-body"><b>'+esc(a.text)+'</b><div class="r-who">الإجابة الصحيحة</div></div><span class="r-badge">👥 '+c+'</span></div>';
+    const pl=players.find(x=>x.id===a.player_id);
+    const pn=pl?pl.name:'؟', pav=pl?pl.avatar:null;
+    return '<div class="reveal-fake"><span class="r-emoji">🎭</span><div class="r-body"><b>'+esc(a.text)+'</b><div class="r-who">'+avHTML(pn,pav)+esc(pn)+'</div></div><span class="r-badge'+(c?'':' zero')+'">+'+c+'</span></div>';
   }).join('');
   await refreshPlayers();
 }
