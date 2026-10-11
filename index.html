@@ -8,12 +8,13 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#dcefff;min-height:100vh;color:#1e3a5f;padding:16px;overflow-x:hidden}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(160deg,#aee3fb 0%,#d8f0fd 35%,#f2f8ff 60%,#fff6dd 100%);background-attachment:fixed;min-height:100vh;color:#1e3a5f;padding:16px;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;z-index:-2;background:repeating-conic-gradient(from 0deg at 50% 28%,#eaf6ff 0deg 10deg,#d8ecfd 10deg 20deg);opacity:.6}
 body::after{content:'';position:fixed;inset:0;z-index:-2;background:radial-gradient(circle at 50% 0%,#ffffffbb 0%,transparent 55%)}
 .bg-emoji{position:fixed;z-index:-1;font-size:34px;opacity:.13;animation:float 7s ease-in-out infinite;pointer-events:none}
 @keyframes float{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-22px) rotate(6deg)}}
 .wrap{max-width:520px;margin:0 auto;position:relative}
+.float-av{position:fixed;width:54px;height:54px;border-radius:50%;border:3px solid #fff;box-shadow:0 8px 18px rgba(2,136,209,.30);z-index:0;pointer-events:none;animation:floaty 5s ease-in-out infinite;object-fit:cover}@keyframes floaty{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-20px) rotate(8deg)}}.wrap{z-index:1}.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.how-step{background:#f2f8ff;border:1px solid #cfe8f9;border-radius:14px;padding:12px 6px;text-align:center;box-shadow:0 6px 14px rgba(2,136,209,.10)}.how-img{font-size:40px;animation:floaty 4s ease-in-out infinite}.how-step b{display:block;font-size:13px;color:#1e3a5f;margin-top:6px}.how-step span{font-size:11px;color:#5b7a99;display:block;margin-top:2px;line-height:1.5}
 .card{background:#fff;border-radius:24px;padding:22px;margin-bottom:14px;border:1px solid #cfe8f9;box-shadow:0 14px 30px rgba(2,136,209,.16),0 4px 10px rgba(2,136,209,.10),inset 0 2px 0 #ffffff;animation:pop .3s}
 @keyframes pop{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:none}}
 h1{text-align:center;color:#1e3a5f;font-size:32px;margin:10px 0 2px;letter-spacing:1px}
@@ -99,6 +100,7 @@ label{font-weight:bold;font-size:14px;color:#1e3a5f;display:block;margin-top:12p
 </style>
 </head>
 <body>
+<div id="float-layer"><img class="float-av" style="top:70px;right:4%;animation-delay:0s" src="https://che7anli-dz.github.io/kalak-madrasiya/avatars/av1.png" alt=""><img class="float-av" style="top:230px;left:3%;animation-delay:1.2s;animation-duration:6s" src="https://che7anli-dz.github.io/kalak-madrasiya/avatars/av6.png" alt=""><img class="float-av" style="top:430px;right:6%;animation-delay:.6s;animation-duration:4.5s" src="https://che7anli-dz.github.io/kalak-madrasiya/avatars/av8.png" alt=""><img class="float-av" style="top:650px;left:5%;animation-delay:1.8s" src="https://che7anli-dz.github.io/kalak-madrasiya/avatars/av12.png" alt=""><img class="float-av" style="top:890px;right:4%;animation-delay:2.4s;animation-duration:5.5s" src="https://che7anli-dz.github.io/kalak-madrasiya/avatars/av4.png" alt=""><img class="float-av" style="top:1120px;left:6%;animation-delay:3s" src="https://che7anli-dz.github.io/kalak-madrasiya/avatars/av2.png" alt=""></div>
 <span class="bg-emoji" style="top:8%;right:6%">🎓</span>
 <span class="bg-emoji" style="top:22%;left:8%;animation-delay:1s">🎲</span>
 <span class="bg-emoji" style="top:45%;right:10%;animation-delay:2s">🧠</span>
@@ -122,6 +124,14 @@ label{font-weight:bold;font-size:14px;color:#1e3a5f;display:block;margin-top:12p
     <label>كود الغرفة</label>
     <input id="in-code" placeholder="مثال: K7X2PQ" maxlength="6" style="text-transform:uppercase;direction:ltr;text-align:center;letter-spacing:4px;font-weight:bold">
     <button class="btn btn-sec" onclick="joinRoom()">🚪 ادخل الغرفة</button>
+  </div>
+  <div class="card">
+    <h2>🎮 كيفاش تلعب؟</h2>
+    <div class="how-grid">
+      <div class="how-step"><div class="how-img">✍️</div><b>اكتب كذبة</b><span>كذبة مقنعة تخدع صحابك</span></div>
+      <div class="how-step"><div class="how-img">🗳️</div><b>صوت بذكاء</b><span>لقى الإجابة الصحيحة</span></div>
+      <div class="how-step"><div class="how-img">🏆</div><b>اجمع النقاط</b><span>+2 للصحيحة و+1 لكل مخدوع</span></div>
+    </div>
   </div>
   <div class="foot"><a onclick="openSuggest()">💡 اقترح سؤالاً لبنك الأسئلة</a></div>
 </div>
