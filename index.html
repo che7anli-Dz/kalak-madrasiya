@@ -38,7 +38,8 @@ label{font-weight:bold;font-size:14px;color:#1e3a5f;display:block;margin-top:12p
 .codebox{background:#1e3a5f;color:#ffd166;font-size:38px;font-weight:bold;letter-spacing:8px;text-align:center;padding:16px;border-radius:16px;margin:10px 0;direction:ltr}
 .player{display:flex;justify-content:space-between;align-items:center;background:#f2f8ff;border:3px solid #1e3a5f;border-radius:14px;padding:8px 12px;margin-top:8px;font-size:16px;font-weight:bold;color:#1e3a5f}
 .avatar{width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:17px;margin-left:8px;border:2px solid #1e3a5f;flex-shrink:0}
-.pname{display:flex;align-items:center}
+.pname{display:flex;flex-direction:column;align-items:center;gap:2px}
+.pname-nm{font-size:11px;font-weight:bold;color:#1e3a5f;line-height:1.2;text-align:center;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .player .sc{background:#2f80ed;color:#fff;border-radius:20px;padding:2px 12px;font-weight:bold;font-size:14px;border:2px solid #1e3a5f}
 .host-tag{background:#ffd166;color:#1e3a5f;font-size:11px;border-radius:8px;padding:2px 8px;margin-right:6px;font-weight:bold;border:2px solid #1e3a5f}
 .qbox{background:#fffbe8;border:3px dashed #1e3a5f;border-radius:18px;padding:18px;font-size:21px;font-weight:bold;text-align:center;margin:12px 0;color:#1e3a5f;line-height:1.7}
@@ -58,7 +59,7 @@ label{font-weight:bold;font-size:14px;color:#1e3a5f;display:block;margin-top:12p
 .r-emoji{font-size:26px;flex-shrink:0}
 .r-body{flex:1;min-width:0}
 .r-body b{font-size:17px}
-.r-who{display:flex;align-items:center;gap:6px;font-size:12px;color:#5b7a99;margin-top:4px}
+.r-who{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:bold;color:#1e3a5f;margin-top:4px}
 .r-who .avatar{width:24px;height:24px;font-size:11px;margin:0;border-width:2px}
 .r-badge{background:#1e3a5f;color:#fff;border-radius:12px;padding:4px 12px;font-weight:bold;font-size:15px;white-space:nowrap;flex-shrink:0}
 .reveal-true .r-badge{background:#22a95c}
@@ -90,6 +91,7 @@ label{font-weight:bold;font-size:14px;color:#1e3a5f;display:block;margin-top:12p
 .av-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}
 .av-opt{background:#fff;border:3px solid #1e3a5f;border-radius:14px;padding:4px;cursor:pointer;text-align:center;box-shadow:0 3px 0 #1e3a5f}
 .av-opt img{width:100%;border-radius:10px;display:block}
+.av-name{display:block;font-size:10px;font-weight:bold;color:#1e3a5f;margin-top:2px;line-height:1.2}
 .av-opt:active{transform:translateY(2px);box-shadow:none}
 .av-opt.sel{background:#ffd166;transform:scale(1.08)}
 .avatar .em{font-size:22px}
@@ -376,11 +378,11 @@ function copyCode(){
   else toast('الكود: '+me.code);
 }
 
-const AVATARS=["https://che7anli-dz.github.io/kalak-madrasiya/avatars/av1.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av2.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av3.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av4.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av5.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av6.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av7.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av8.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av9.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av10.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av11.png","https://che7anli-dz.github.io/kalak-madrasiya/avatars/av12.png"];
+const AVATARS=[{img:"https://che7anli-dz.github.io/kalak-madrasiya/avatars/av1.png",name:"ولد مبتسم"},{img:"https://che7anli-dz.github.io/kalak-madrasiya/avatars/av2.png",name:"بنت بالحجاب"},{img:"https://che7anli-dz.github.io/kalak-madrasiya/avatars/av3.png",name:"بنت بالنظارات"},{img:"https://che7anli-dz.github.io/kalak-madrasiya/avatars/av4.png",name:"ولد بالقبعة"},{img:"https://che7anli-dz.github.io/kalak-madrasiya/avatars/av5.png",name:"شاب باللحية"},{img:"https://che7anli-dz.github.io/kalak-madrasiya/avatars/av6.png",name:"بنت تغمز"},{img:"https://che7anli-dz.github.io/kalak-madrasiya/avatars/av7.png",name:"ولد بالأفرو"},{img:"https://che7anli-dz.github.io/kalak-madrasiya/avatars/av8.png",name:"بنت بالضفائر"},{img:"https://che7anli-dz.github.io/kalak-madrasiya/avatars/av9.png",name:"ولد ذكي"},{img:"https://che7anli-dz.github.io/kalak-madrasiya/avatars/av10.png",name:"بنت مرحة"},{img:"https://che7anli-dz.github.io/kalak-madrasiya/avatars/av11.png",name:"ولد بالنمش"},{img:"https://che7anli-dz.github.io/kalak-madrasiya/avatars/av12.png",name:"روبوت لطيف"}];
 let myAvatar=null;
 try{myAvatar=localStorage.getItem('kalak_avatar')||null;}catch(e){}
 function renderAvGrid(){
-  $('av-grid').innerHTML=AVATARS.map((a,i)=>'<div class="av-opt'+(a===myAvatar?' sel':'')+'" onclick="pickAvatar(\''+a+'\')"><img src="'+a+'" alt="'+(i+1)+'"></div>').join('');
+  $('av-grid').innerHTML=AVATARS.map((a,i)=>'<div class="av-opt'+(a.img===myAvatar?' sel':'')+'" onclick="pickAvatar(\''+a.img+'\')"><img src="'+a.img+'" alt="'+a.name+'"><span class="av-name">'+a.name+'</span></div>').join('');
 }
 function pickAvatar(a){myAvatar=a;try{localStorage.setItem('kalak_avatar',a);}catch(e){}renderAvGrid();}
 
@@ -390,7 +392,7 @@ function avHTML(n,av){return av?'<span class="avatar" style="background:#fff;ove
 async function refreshPlayers(){
   const {data}=await sb.from('kalak_players').select('*').eq('room_id',me.roomId).order('joined_at');
   players=data||[];
-  $('players').innerHTML=players.map(p=>'<div class="player"><span class="pname">'+avHTML(p.name,p.avatar)+esc(p.name)+(p.is_host?'<span class="host-tag">المضيف 👑</span>':'')+'</span><span class="sc">'+p.score+'</span></div>').join('');
+  $('players').innerHTML=players.map(p=>'<div class="player"><span class="pname">'+avHTML(p.name,p.avatar)+'<span class="pname-nm">'+esc(p.name)+'</span>'+(p.is_host?'<span class="host-tag">المضيف 👑</span>':'')+'</span><span class="sc">'+p.score+'</span></div>').join('');
   $('pcount').textContent='('+(players.length)+' لاعب)';
   renderScores();
 }
