@@ -154,14 +154,12 @@ label{font-weight:bold;font-size:14px;color:#1e3a5f;display:block;margin-top:12p
       <button class="btn btn-pri" id="btn-send-fake" onclick="sendFake()">📨 أرسل إجابتي</button>
       <div class="wait" id="fake-wait" style="display:none">✅ إجابتك وصلت! استنى زملاءك... <b id="ans-count"></b></div>
       <div class="timer">⏱️ <span class="big-timer" id="t-ans">30</span></div>
-      <div id="host-skip-a" style="display:none"><button class="btn btn-warn" onclick="forceVoting()">⏩ تخطي الانتظار</button></div>
     </div>
 
     <div id="ph-voting" style="display:none">
       <label>🕵️ وين راهي الإجابة الصحيحة؟ (ما تقدرش تختار إجابتك)</label>
       <div id="vote-list"></div>
       <div class="timer">⏱️ <span class="big-timer" id="t-vote">45</span></div>
-      <div id="host-skip-v" style="display:none"><button class="btn btn-warn" onclick="forceReveal()">⏩ اظهر النتيجة</button></div>
     </div>
 
     <div id="ph-reveal" style="display:none">
@@ -473,8 +471,6 @@ async function setupRound(){
   $('btn-send-fake').style.display='block';
   $('btn-send-fake').disabled=false;
   $('fake-wait').style.display='none';
-  $('host-skip-a').style.display=me.isHost?'block':'none';
-  $('host-skip-v').style.display='none';
   $('host-next').style.display='none';
   countdown('t-ans',30,()=>{if(me.isHost)forceVoting();});
   const c=await answerCount();
@@ -526,8 +522,6 @@ async function setupVoting(){
   $('ph-answering').style.display='none';
   $('ph-voting').style.display='block';
   $('ph-reveal').style.display='none';
-  $('host-skip-a').style.display='none';
-  $('host-skip-v').style.display=me.isHost?'block':'none';
   $('host-next').style.display='none';
   const {data}=await sb.from('kalak_answers').select('id,text,player_id').eq('room_id',me.roomId).eq('round',room.round);
   const list=shuffle(data||[]);
