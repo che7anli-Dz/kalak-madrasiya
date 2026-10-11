@@ -266,7 +266,6 @@ function playerName(){
   return n;
 }
 try{const sn=localStorage.getItem('kalak_name');if(sn)$('in-name').value=sn;}catch(e){}
-renderAvGrid();
 
 async function createRoom(){
   const n=playerName();if(!n)return;
@@ -385,6 +384,7 @@ function renderAvGrid(){
   $('av-grid').innerHTML=AVATARS.map((a,i)=>'<div class="av-opt'+(a.img===myAvatar?' sel':'')+'" onclick="pickAvatar(\''+a.img+'\')"><img src="'+a.img+'" alt="'+a.name+'"><span class="av-name">'+a.name+'</span></div>').join('');
 }
 function pickAvatar(a){myAvatar=a;try{localStorage.setItem('kalak_avatar',a);}catch(e){}renderAvGrid();}
+renderAvGrid();
 
 const AVC=['#e63946','#2a9d8f','#e9c46a','#9b5de5','#f15bb5','#00bbf9','#ff9f1c','#06d6a0'];
 function avColor(n){let h=0;for(const c of String(n))h=(h*31+c.charCodeAt(0))>>>0;return AVC[h%AVC.length];}
